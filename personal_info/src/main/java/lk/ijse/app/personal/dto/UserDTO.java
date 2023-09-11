@@ -1,4 +1,4 @@
-package lk.ijse.app.personal.dao;
+package lk.ijse.app.personal.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

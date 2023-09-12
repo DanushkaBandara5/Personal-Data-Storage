@@ -3,6 +3,7 @@ package lk.ijse.app.personal.dao.custom.impl;
 import lk.ijse.app.personal.dao.custom.UserDAO;
 import lk.ijse.app.personal.entity.User;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import static lk.ijse.app.personal.dao.util.Mapper.USER_ROW_MAPPER;
 
@@ -10,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
-
+@Repository
 public class UserDAOImpl implements UserDAO {
     private final JdbcTemplate jdbcTemplate;
 

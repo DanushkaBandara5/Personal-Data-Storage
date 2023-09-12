@@ -2,7 +2,9 @@ package lk.ijse.app.personal.dao.custom.impl;
 
 import lk.ijse.app.personal.dao.custom.UserDAO;
 import lk.ijse.app.personal.entity.User;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import static lk.ijse.app.personal.dao.util.Mapper.USER_ROW_MAPPER;
@@ -21,7 +23,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User save(User entity) {
-        jdbcTemplate.update("insert into user (user_name,password) value (?,?)",entity.getUserName(),entity.getPassword());
+        jdbcTemplate.update("insert into user (user_name,password) values (?,?)",entity.getUserName(),entity.getPassword());
         return entity;
     }
 
@@ -38,8 +40,12 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public Optional<User> findById(String name) {
-        return Optional.ofNullable(jdbcTemplate.queryForObject("select * from user where user_name=?",USER_ROW_MAPPER,name));
+    public Optional<User> findById(String userName) {
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject("select * from user where user_name=?", USER_ROW_MAPPER, userName));
+        }catch (EmptyResultDataAccessException e){
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -58,7 +64,8 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public boolean existById(String name) {
-        return findById(name).isPresent();
+    public boolean existById(String userName) {
+
+        return findById(userName).isPresent();
     }
 }

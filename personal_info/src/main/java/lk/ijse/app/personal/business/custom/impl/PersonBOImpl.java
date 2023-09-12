@@ -29,7 +29,7 @@ public class PersonBOImpl implements PersonBO {
         List<Person> savedList = personDAO.findAll();
         for (Person person : savedList) {
             if(person.getContact().equals(personDTO.getContact())||person.getEmail().equalsIgnoreCase(personDTO.getEmail())){
-                throw new DuplicateEntryException(personDTO.getContact()+ " Entered Data Already Exists");
+                throw new DuplicateEntryException("Entered Data Already Exists");
             }
         }
         return transformer.fromPersonEntity(personDAO.save(transformer.toPersonEntity(personDTO)));
@@ -37,20 +37,20 @@ public class PersonBOImpl implements PersonBO {
     }
 
     @Override
-    public void updatePerson(PersonDTO personDTO) {
+    public PersonDTO updatePerson(PersonDTO personDTO) {
         if (!personDAO.existById(personDTO.getId())) {
             throw new RecordNotFundException(personDTO.getId() + " Not exists");
         }
         List<Person> savedList = personDAO.findAll();
         for (Person person : savedList) {
-            if (person.getContact().equals(personDTO.getContact()) || person.getEmail().equalsIgnoreCase(personDTO.getEmail())) {
-                throw new DuplicateEntryException(personDTO.getContact() + " Entered Data Already Exists");
+            if (person.getId() != personDTO.getId() && (person.getContact().equals(personDTO.getContact()) || person.getEmail().equalsIgnoreCase(personDTO.getEmail()))) {
+                throw new DuplicateEntryException("Entered Data Already Exists");
             }
-            personDAO.update(transformer.toPersonEntity(personDTO));
+
 
         }
+        return transformer.fromPersonEntity(personDAO.update(transformer.toPersonEntity(personDTO)));
     }
-
     @Override
     public void deletePersonById(int id) {
         if(!personDAO.existById(id)){
@@ -67,6 +67,9 @@ public class PersonBOImpl implements PersonBO {
 
     @Override
     public Optional<PersonDTO> getPersonById(int id) {
-        return personDAO.findById(id).map(transformer::fromPersonEntity);
+       if( !personDAO.existById(id)){
+           throw new RecordNotFundException(id + " Not Exists");
+       }
+       return personDAO.findById(id).map(transformer::fromPersonEntity);
     }
 }

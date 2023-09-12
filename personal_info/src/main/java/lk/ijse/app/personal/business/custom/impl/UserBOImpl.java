@@ -23,17 +23,20 @@ public class UserBOImpl implements UserBO {
 
     @Override
     public void saveUser(UserDTO userDTO) {
-        if(userDAO.findById(userDTO.getUserName()).isPresent()){
+        if(userDAO.existById(userDTO.getUserName())){
             throw new DuplicateEntryException(userDTO.getUserName()+ " Already Registered User");
         }
+
         userDAO.save(transformer.toUserEntity(userDTO));
     }
 
     @Override
     public void updateUser(UserDTO userDTO) {
-        if(!userDAO.findById(userDTO.getUserName()).isPresent()){
+        if(!userDAO.existById(userDTO.getUserName())){
             throw new RecordNotFundException(userDTO.getUserName()+ " Not a Registered Username");
         }
+
+        userDAO.update(transformer.toUserEntity(userDTO));
 
     }
 }

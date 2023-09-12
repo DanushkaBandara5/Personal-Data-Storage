@@ -13,6 +13,6 @@ public class Mapper {
     });
 
     public static RowMapper<User> USER_ROW_MAPPER=((rs,rowNum)->{
-        return User.builder().userName(rs.getString("user_name")).password(rs.getString("password")).build();
+       return User.builder().userName(rs.getString("user_name")).password(rs.getString("password")).build();
     });
 }

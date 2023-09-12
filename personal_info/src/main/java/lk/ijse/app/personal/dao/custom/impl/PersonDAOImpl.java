@@ -2,10 +2,10 @@ package lk.ijse.app.personal.dao.custom.impl;
 
 import lk.ijse.app.personal.dao.custom.PersonDAO;
 import lk.ijse.app.personal.entity.Person;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import static lk.ijse.app.personal.dao.util.Mapper.PERSON_ROW_MAPPER;
@@ -15,10 +15,10 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 @Repository
-public class PersonalDAOImpl  implements PersonDAO {
+public class PersonDAOImpl implements PersonDAO {
     private final JdbcTemplate jdbcTemplate;
 
-    public PersonalDAOImpl(JdbcTemplate jdbcTemplate) {
+    public PersonDAOImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -54,8 +54,13 @@ public class PersonalDAOImpl  implements PersonDAO {
 
     @Override
     public Optional<Person> findById(Integer id) {
-        return Optional.ofNullable(jdbcTemplate.queryForObject("select * from person where id=?",PERSON_ROW_MAPPER,id));
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject("select * from person where id=?", PERSON_ROW_MAPPER, id));
+        }catch (EmptyResultDataAccessException e){
+            return Optional.empty();
+        }
     }
+
 
     @Override
     public List<Person> filterEntity(String query) {

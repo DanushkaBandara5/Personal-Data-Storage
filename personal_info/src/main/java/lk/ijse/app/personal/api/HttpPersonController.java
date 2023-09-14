@@ -6,10 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
+import javax.validation.Valid;
 import java.util.List;
 
-@CrossOrigin
+
 @RestController
 @RequestMapping("/api/v1/persons")
 public class HttpPersonController {
@@ -18,30 +18,41 @@ public class HttpPersonController {
     public HttpPersonController(PersonBO personBO) {
         this.personBO = personBO;
     }
+
+
     @ResponseStatus(HttpStatus.OK)
     @GetMapping()
-    public List<PersonDTO> filterCustomers(@RequestParam (name = "q",required = false)String query){
-        if(query==null) query="";
-        query="%"+query+"%";
-       return personBO.findPersonByQuery(query);
+    public List<PersonDTO> filterCustomers(@RequestParam(name = "q", required = false) String query) {
+        if (query == null) query = "";
+        query = "%" + query + "%";
+        return personBO.findPersonByQuery(query);
     }
+
+
     @GetMapping("/{id}")
-    public PersonDTO getPersonById(@PathVariable int id){
-       return personBO.getPersonById(id).get();
+    public PersonDTO getPersonById(@PathVariable int id) {
+        return personBO.getPersonById(id).get();
     }
+
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public void deletePerson(@PathVariable int id){
+    public void deletePerson(@PathVariable int id) {
         personBO.deletePersonById(id);
     }
+
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public PersonDTO savePerson(@RequestBody PersonDTO personDTO){
-        return  personBO.savePerson(personDTO);
+    public PersonDTO savePerson(@RequestBody @Valid PersonDTO personDTO) {
+
+        return personBO.savePerson(personDTO);
     }
+
+
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}")
-    public PersonDTO updatePerson(@PathVariable String id,@RequestBody PersonDTO personDTO){
+    public PersonDTO updatePerson(@PathVariable String id, @RequestBody @Valid PersonDTO personDTO) {
         personDTO.setId(Integer.parseInt(id));
         return personBO.updatePerson(personDTO);
     }

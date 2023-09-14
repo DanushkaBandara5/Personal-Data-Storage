@@ -1,8 +1,7 @@
 package lk.ijse.app.personal.entity;
 
-import com.sun.source.doctree.SerialDataTree;
-
 import java.io.Serializable;
+//this interface is designed to restrict the values of generic type parameters
 
 public interface SuperEntity extends Serializable {
 }

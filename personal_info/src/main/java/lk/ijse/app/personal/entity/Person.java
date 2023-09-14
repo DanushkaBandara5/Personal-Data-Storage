@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+//this entity class is defined to represent entity in a user table
 public class Person implements SuperEntity {
     private int id;
     private String name;
